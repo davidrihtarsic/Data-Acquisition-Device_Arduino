@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="dr. David Rihtaršič">
+  <meta name="dcterms.date" content="2018-03-09">
+  <title>Arduino DAQ</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css">
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+      section.level1 > h1 {font-size: 100%;}
+      section.level1 > p {font-size: 100%;}
+      section.level1 > ul {font-size: 100%;}
+      section.level1 > li {font-size: 100%;}
+      section.level1 > table {font-size: 100%;}
+  </style>
+  <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/white.css" id="theme">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'http://lab.hakim.se/reveal-js/css/print/pdf.css' : 'http://lab.hakim.se/reveal-js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="http://lab.hakim.se/reveal-js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Arduino DAQ</h1>
+  <p class="author">dr. David Rihtaršič</p>
+  <p class="date">2018-03-09</p>
+</section>
+
+<section id="arduino-data-acquisition-system" class="slide level1">
+<h1>Arduino Data Acquisition System</h1>
+<p>On the market we can different DAQ systems which are hi-end products and often expencive (from 100 € .. n k€). Buy we can use Arduino (Uno, nano, …) as low-cost data acqusition system if we do not need scientific accurate data (for pedagogical puproses). <img data-src="http://www.ni.com/images/features/us/111201_fg_daq_info_graphic.jpg" alt="Parts of DAQ" />[<a href="http://www.ni.com/data-acquisition/what-is" title="What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018">NationalInstruments</a>]</p>
+</section>
+<section id="importance-of-real-life-experiments-for-students" class="slide level1">
+<h1>Importance of real-life experiments for students</h1>
+<ul>
+<li>where theory finds its place</li>
+<li>greater motivation for learning</li>
+<li>more (learning) input –&gt; beater understanding</li>
+</ul>
+</section>
+<section class="slide level1">
+
+<ul>
+<li>instant data processing</li>
+<li>explicit presentation of interdependent variables</li>
+<li>visualization of physical quantities that are detected by human nature</li>
+</ul>
+</section>
+<section id="requirements" class="slide level1">
+<h1>Requirements</h1>
+<p>(Checked is required, unchecked is optional)</p>
+<p><strong>Hardware</strong>:</p>
+<ul>
+<li>[x] Computer</li>
+<li>[x] Arduino board (<a href="https://store.arduino.cc/arduino-uno-rev3">Arduino UNO</a>, <a href="https://www.aliexpress.com/item/Nano-CH340-ATmega328P-MicroUSB-Compatible-for-Arduino-Nano-V3/32572612009.html?spm=2114.search0104.3.1.34b52b20RGIwod&amp;ws_ab_test=searchweb0_0,searchweb201602_4_10152_10151_10065_10344_10068_10342_10343_10340_10341_10084_10083_10618_10304_10307_10301_5711212_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_10621_10620_5722413_5711313,searchweb201603_25,ppcSwitch_5&amp;algo_expid=d5f1485f-be15-4f3e-93b6-b3120c7b8ac3-0&amp;algo_pvid=d5f1485f-be15-4f3e-93b6-b3120c7b8ac3&amp;transAbTest=ae803_3&amp;priceBeautifyAB=0">clone products</a> )</li>
+<li>[x] basic electronics components for sensors</li>
+<li>[ ] arduino set starter <a href="https://www.aliexpress.com/item/The-Best-RFID-Starter-Kits-For-Arduino-Uno-R3-With-Tutorial-Power-Supply-Learning-Kit-US/32623921742.html?spm=2114.10010108.1000013.3.1f3929415iOC4y&amp;traffic_analysisId=recommend_2088_2_90158_iswistore&amp;scm=1007.13339.90158.0&amp;pvid=256e4e8d-3f20-47e9-b3d3-56af5fadcd51&amp;tpp=1">for example use this kit</a></li>
+<li>[ ] arduino sensors set <a href="https://www.aliexpress.com/item/37-In-1-Sensor-Kits-For-Arduino-Raspberry-Pi-Beginner-Learning-Sensor-Module-Suit-Ultimate-Top/32851582028.html?spm=2114.search0104.3.29.66a36682D8jqIb&amp;ws_ab_test=searchweb0_0,searchweb201602_4_10152_10151_10065_10344_10068_10342_10343_10340_10341_10084_10083_10618_10304_10307_10301_5711211_10313_10059_10534_100031_10103_10627_10626_10624_10623_10622_5722411_5711315_10621_10620,searchweb201603_25,ppcSwitch_5&amp;algo_expid=4674573e-7df9-4805-bd73-64edd1408ad6-4&amp;algo_pvid=4674573e-7df9-4805-bd73-64edd1408ad6&amp;transAbTest=ae803_3&amp;priceBeautifyAB=0">for example use this kit</a></li>
+</ul>
+<p><strong>Software</strong>:</p>
+<ul>
+<li>[x] Arduino IDE <a href="https://www.arduino.cc/en/Main/Software">download here</a></li>
+<li>[ ] Python (&gt;=3.0)</li>
+<li>[ ] pyserial</li>
+<li>[ ] Ms Excel</li>
+</ul>
+</section>
+<section id="pros-cons" class="slide level1">
+<h1>Pros &amp; Cons</h1>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Pros</strong></th>
+<th><strong>Cons</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>+ Price (Arduino ~3€, sensors ~2-5€)</td>
+<td>- work in progress</td>
+</tr>
+<tr class="even">
+<td>+ Accessibility</td>
+<td>- no plug&amp;play solutions</td>
+</tr>
+<tr class="odd">
+<td>+ Versatility</td>
+<td>- DIY project</td>
+</tr>
+<tr class="even">
+<td>+ Easy importing data into MS Excel</td>
+<td>- low sampling rate ~6kHz</td>
+</tr>
+<tr class="odd">
+<td>+ točne časovne meritve</td>
+<td>- 10-bi resolutuin</td>
+</tr>
+</tbody>
+</table>
+<p>More about DAQ you can read in further reading…</p>
+</section>
+<section id="data-acquisition-system" class="slide level1">
+<h1>Data Acquisition System</h1>
+<p>Data acquisition is the process of sampling signals that measure real world physical conditions and converting the resulting samples into digital numeric values that can be manipulated by a computer [<a href="https://en.wikipedia.org/wiki/Data_acquisition" title="Data acquisition - Wikipedia, https://en.wikipedia.org/wiki/Data_acquisition, Accessed on 03/08/2018">Wikipedia</a>]. Data acquisition systems, abbreviated by the acronyms DAS or DAQ, typically convert analog waveforms into digital values for processing. The components of data acquisition systems include: - Sensors, to convert physical parameters to electrical signals. - Signal conditioning circuitry, to convert sensor signals into a form that can be converted to digital values. - Analog-to-digital converters, to convert conditioned sensor signals to digital values.</p>
+<p>Data acquisition applications are usually controlled by software programs developed using various general purpose programming languages such as Assembly, BASIC, C, C++, C#, Fortran, Java, LabVIEW, Lisp, Pascal, etc. Stand-alone data acquisition systems are often called data loggers[<a href="https://en.wikipedia.org/wiki/Data_acquisition" title="Data acquisition - Wikipedia, https://en.wikipedia.org/wiki/Data_acquisition, Accessed on 03/08/2018">Wikipedia</a>].</p>
+<p>There are also open-source software packages providing all the necessary tools to acquire data from different hardware equipment. These tools come from the scientific community where complex experiment requires fast, flexible and adaptable software. Those packages are usually custom fit but more general DAQ package like the Maximum Integrated Data Acquisition System can be easily tailored and is used in several physics experiments worldwide[<a href="https://en.wikipedia.org/wiki/Data_acquisition" title="Data acquisition - Wikipedia, https://en.wikipedia.org/wiki/Data_acquisition, Accessed on 03/08/2018">Wikipedia</a>].</p>
+<h2 id="parts-of-a-daq-system-nationalinstruments">Parts of a DAQ System [<a href="http://www.ni.com/data-acquisition/what-is" title="What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018">NationalInstruments</a>]</h2>
+<figure>
+<img data-src="http://www.ni.com/images/features/us/111201_fg_daq_info_graphic.jpg" alt="Parts of DAQ" /><figcaption>Parts of DAQ</figcaption>
+</figure>
+<h3 id="what-is-a-sensor">What Is a Sensor?</h3>
+<p>The measurement of a physical phenomenon, such as the temperature of a room, the intensity of a light source, or the force applied to an object, begins with a sensor. A sensor, also called a transducer, converts a physical phenomenon into a measurable electrical signal. Depending on the type of sensor, its electrical output can be a voltage, current, resistance, or another electrical attribute that varies over time. Some sensors may require additional components and circuitry to properly produce a signal that can accurately and safely be read by a DAQ device [<a href="http://www.ni.com/data-acquisition/what-is" title="What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018">NationalInstruments</a>]. ### What Is a DAQ Device? DAQ hardware acts as the interface between a computer and signals from the outside world. It primarily functions as a device that digitizes incoming analog signals so that a computer can interpret them. The three key components of a DAQ device used for measuring a signal are the signal conditioning circuitry, analog-to-digital converter (ADC), and computer bus. Many DAQ devices include other functions for automating measurement systems and processes. For example, digital-to-analog converters (DACs) output analog signals, digital I/O lines input and output digital signals, and counter/timers count and generate digital pulses<a href="http://www.ni.com/data-acquisition/what-is" title="What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018">NationalInstruments</a>. ### What Is a Computer’s Role in a DAQ System? A computer with programmable software controls the operation of the DAQ device and is used for processing, visualizing, and storing measurement data. Different types of computers are used in different types of applications. A desktop may be used in a lab for its processing power, a laptop may be used in the field for its portability, or an industrial computer may be used in a manufacturing plant for its ruggedness [<a href="http://www.ni.com/data-acquisition/what-is" title="What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018">NationalInstruments</a>].</p>
+</section>
+<section id="references" class="slide level1">
+<h1>References</h1>
+<p>Wikipedia: Data acquisition - Wikipedia, https://en.wikipedia.org/wiki/Data_acquisition, Accessed on 03/08/2018 National Instruments: What Is Data Acquisition? - National Instruments, http://www.ni.com/data-acquisition/what-is/, Accessed on 03/08/2018</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
+  <script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
